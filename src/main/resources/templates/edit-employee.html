@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Employee | Employee Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold text-gray-800">Edit Employee</h1>
+        <a th:href="@{/employees}" class="text-blue-600 hover:underline">
+            ← Back to List
+        </a>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+        <form th:action="@{/employee/update/{id}(id=${id})}" method="post" th:object="${employeeDTO}" class="space-y-6">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" th:field="*{firstName}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" th:field="*{lastName}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" th:field="*{email}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Phone</label>
+                    <input type="text" th:field="*{phone}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Department</label>
+                    <input type="text" th:field="*{department}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <select th:field="*{active}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Employee Type</label>
+                <select id="employeeType" th:field="*{employeeType}" onchange="toggleTypeSections()" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+                    <option value="fulltime" th:selected="${employeeDTO.employeeType == 'fulltime'}">Full-Time</option>
+                    <option value="parttime" th:selected="${employeeDTO.employeeType == 'parttime'}">Part-Time</option>
+                </select>
+            </div>
+
+            <div id="fullTimeFields" class="space-y-4">
+                <h3 class="text-lg font-semibold text-gray-700 pt-4">Full-Time Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Salary</label>
+                        <input type="number" step="0.01" th:field="*{salary}" class="mt-1 w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Paid Leave Days</label>
+                        <input type="number" th:field="*{paidLeaveDays}" class="mt-1 w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Hire Date</label>
+                        <input type="date" th:field="*{hireDate}" class="mt-1 w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                </div>
+            </div>
+
+            <div id="partTimeFields" class="space-y-4">
+                <h3 class="text-lg font-semibold text-gray-700 pt-4">Part-Time Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Hourly Rate</label>
+                        <input type="number" step="0.01" th:field="*{hourlyRate}" class="mt-1 w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Max Hours/Week</label>
+                        <input type="number" th:field="*{maxHoursPerWeek}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Scheduled Hours</label>
+                        <input type="number" step="0.1" th:field="*{scheduledHours}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">On-Call Eligible</label>
+                        <select th:field="*{onCallEligible}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Start Date</label>
+                        <input type="date" name="startDate" th:value="${#temporals.format(employeeDTO.startDate, 'yyyy-MM-dd')}" class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+                    Update Employee
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <footer class="text-center text-sm text-gray-500 mt-8">
+        &copy; <span th:text="${T(java.time.Year).now()}">2025</span> Employee Manager. All rights reserved.
+    </footer>
+</div>
+
+<script>
+    function toggleTypeSections() {
+        const type = document.getElementById('employeeType').value;
+        document.getElementById('fullTimeFields').style.display = type === 'fulltime' ? 'block' : 'none';
+        document.getElementById('partTimeFields').style.display = type === 'parttime' ? 'block' : 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', toggleTypeSections);
+</script>
+
+</body>
+</html>

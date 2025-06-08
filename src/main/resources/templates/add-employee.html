@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Employee | Employee Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4">
+<div class="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8">
+    <h1 class="text-2xl font-bold mb-6 text-gray-800">Add Employee</h1>
+
+    <form th:action="@{/employee/add}" method="post" th:object="${employee}" class="space-y-4">
+
+        <div>
+            <label class="block font-medium text-gray-700">First Name</label>
+            <input type="text" th:field="*{firstName}" placeholder="e.g. Alice"
+                   class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+        </div>
+
+        <div>
+            <label class="block font-medium text-gray-700">Last Name</label>
+            <input type="text" th:field="*{lastName}" placeholder="e.g. Justin"
+                   class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+        </div>
+
+        <div>
+            <label class="block font-medium text-gray-700">Email</label>
+            <input type="email" th:field="*{email}" placeholder="e.g. alicejustin@xyz.com"
+                   class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+        </div>
+
+        <div>
+            <label class="block font-medium text-gray-700">Phone</label>
+            <input type="tel" th:field="*{phone}" placeholder="e.g. +255 XXX XXXX"
+                   class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+        </div>
+
+        <div>
+            <label class="block font-medium text-gray-700">Department</label>
+            <input type="text" th:field="*{department}" placeholder="e.g. ICT"
+                   class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <input type="checkbox" th:field="*{active}" id="active"
+                   class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+            <label for="active" class="text-gray-700 font-medium">Is Active?</label>
+        </div>
+
+        <div>
+            <label class="block font-medium text-gray-700">Employee Type</label>
+            <select th:field="*{employeeType}" onchange="toggleFields(this.value)"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+                <option value="fulltime">Full time Employee</option>
+                <option value="parttime">Part time Employee</option>
+            </select>
+        </div>
+
+        <div id="fullTimeFields" class="space-y-4">
+            <div>
+                <label class="block font-medium text-gray-700">Salary</label>
+                <input type="number" th:field="*{salary}" placeholder="e.g. 850000"
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div>
+                <label class="block font-medium text-gray-700">Hired Date</label>
+                <input type="date" th:field="*{hireDate}"
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div>
+                <label class="block font-medium text-gray-700">Paid Leave Days</label>
+                <input type="number" th:field="*{paidLeaveDays}" placeholder="e.g. 220"
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+        </div>
+
+        <div id="partTimeFields" class="space-y-4">
+            <div>
+                <label class="block font-medium text-gray-700">Hourly Rate</label>
+                <input type="number" th:field="*{hourlyRate}"
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div>
+                <label class="block font-medium text-gray-700">Scheduled Hours</label>
+                <input type="number" th:field="*{scheduledHours}"
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div>
+                <label class="block font-medium text-gray-700">Start Date</label>
+                <input type="date" th:field="*{startDate}"
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div>
+                <label class="block font-medium text-gray-700">Max Hours/Week</label>
+                <input type="number" th:field="*{maxHoursPerWeek}"
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div class="flex items-center gap-2">
+                <input type="checkbox" th:field="*{onCallEligible}" id="onCallEligible"
+                       class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+                <label for="onCallEligible" class="text-gray-700 font-medium">Eligible for On-call?</label>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
+                Add Employee
+            </button>
+            <a href="/employees"
+               class="text-sm text-gray-600 hover:underline">Back to list</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    function toggleFields(employeeType) {
+        const fullTimeFields = document.getElementById("fullTimeFields");
+        const partTimeFields = document.getElementById("partTimeFields");
+
+        fullTimeFields.style.display = "none";
+        partTimeFields.style.display = "none";
+
+        if (employeeType === "parttime") {
+            partTimeFields.style.display = "block";
+        } else {
+            fullTimeFields.style.display = "block";
+        }
+    }
+
+    window.onload = function () {
+        const select = document.querySelector('select[name="employeeType"]');
+        toggleFields(select.value);
+    }
+</script>
+</body>
+</html>
