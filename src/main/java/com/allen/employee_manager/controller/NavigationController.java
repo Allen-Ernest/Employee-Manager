@@ -17,6 +17,11 @@ public class NavigationController {
     public NavigationController(EmployeeService employeeService){
         this.employeeService = employeeService;
     }
+    
+    @GetMapping("/")
+    public String getHomePage(){
+        return "home";
+    }
 
     @GetMapping("/employees")
     public String listEmployees(Model model){
