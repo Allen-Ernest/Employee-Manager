@@ -5,10 +5,24 @@
   <title>Home | Employee Manager</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Prevent scrolling during loader */
+    body.loading {
+      overflow: hidden;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans text-gray-800">
+<body class="bg-gray-100 font-sans text-gray-800 loading">
 
-<!-- Header -->
+<!-- 🔄 Loader -->
+<div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+  <div class="flex flex-col items-center gap-4">
+    <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    <p class="text-blue-600 text-sm font-semibold">Loading, please wait...</p>
+  </div>
+</div>
+
+<!-- 🌐 Header -->
 <header class="bg-blue-600 text-white shadow-md py-4 px-6 flex justify-between items-center">
   <h1 class="text-2xl font-semibold">Employee Manager</h1>
   <nav class="space-x-4">
@@ -18,7 +32,7 @@
   </nav>
 </header>
 
-<!-- Hero Section -->
+<!-- ✨ Hero Section -->
 <section class="bg-white py-16 px-6 text-center">
   <div class="max-w-4xl mx-auto">
     <h2 class="text-4xl font-bold text-blue-700 mb-4">Welcome to Employee Manager</h2>
@@ -27,7 +41,7 @@
   </div>
 </section>
 
-<!-- Features Section -->
+<!-- 🚀 Features -->
 <section class="py-16 px-6 bg-gray-50">
   <div class="max-w-6xl mx-auto">
     <h3 class="text-3xl font-semibold text-center mb-12 text-gray-800">Key Features</h3>
@@ -48,7 +62,7 @@
   </div>
 </section>
 
-<!-- Call to Action -->
+<!-- 📣 Call to Action -->
 <section class="bg-blue-50 py-16 px-6">
   <div class="max-w-4xl mx-auto text-center">
     <h3 class="text-2xl font-semibold text-gray-800 mb-4">Ready to streamline your HR process?</h3>
@@ -57,10 +71,18 @@
   </div>
 </section>
 
-<!-- Footer -->
+<!-- 🔚 Footer -->
 <footer class="text-center text-sm text-gray-400 py-6 bg-white border-t">
   &copy; 2025 Employee Manager. All rights reserved.
 </footer>
+
+<!-- ✅ Loader hide script -->
+<script>
+  window.addEventListener('load', () => {
+    document.getElementById('loader').style.display = 'none';
+    document.body.classList.remove('loading');
+  });
+</script>
 
 </body>
 </html>

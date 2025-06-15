@@ -9,21 +9,38 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+        #loader {
+            transition: opacity 0.5s ease;
+        }
+
+        #loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen loading">
+
+<div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+    <div class="flex flex-col items-center gap-4">
+        <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-blue-600 text-sm font-semibold">Please wait...</p>
+    </div>
+</div>
 
 <div class="max-w-4xl mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-semibold text-gray-800">Edit Employee</h1>
-        <a th:href="@{/employees}" class="text-blue-600 hover:underline">
-            ← Back to List
-        </a>
+        <a th:href="@{/employees}" class="text-blue-600 hover:underline">← Back to List</a>
     </div>
 
     <div class="bg-white p-6 rounded-lg shadow">
         <form th:action="@{/employee/update/{id}(id=${id})}" method="post" th:object="${employeeDTO}" class="space-y-6">
-
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700">First Name</label>
@@ -130,6 +147,22 @@
     }
 
     document.addEventListener('DOMContentLoaded', toggleTypeSections);
+
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('hidden');
+        setTimeout(() => {
+            loader.style.display = 'none';
+            document.body.classList.remove('loading');
+        }, 500);
+    });
+
+    document.querySelector('form').addEventListener('submit', () => {
+        const loader = document.getElementById('loader');
+        loader.classList.remove('hidden');
+        loader.style.display = 'flex';
+        document.body.classList.add('loading');
+    });
 </script>
 
 </body>
